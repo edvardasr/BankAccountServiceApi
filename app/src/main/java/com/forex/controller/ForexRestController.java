@@ -23,6 +23,11 @@ public class ForexRestController {
 	@GetMapping("/find-status/{accountnum}")
 	public ResponseEntity<String> getAccountStatus(@PathVariable String accountnum) {
 		Account account = forexRepository.findByAccountnum(accountnum);
+		
+		if (account == null) {
+			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+		}
+		
 		String status = account.getStatus();
 		return new ResponseEntity<String>(status, HttpStatus.OK);
 	}
@@ -30,6 +35,11 @@ public class ForexRestController {
 	@GetMapping("/find-balance/{accountnum}")
 	public ResponseEntity<BigDecimal> getAccountBalance(@PathVariable String accountnum) {
 		Account account = forexRepository.findByAccountnum(accountnum);
+		
+		if (account == null) {
+			return new ResponseEntity<BigDecimal>(HttpStatus.NOT_FOUND);
+		}
+		
 		BigDecimal balance = account.getBalance();
 		return new ResponseEntity<BigDecimal>(balance, HttpStatus.OK);
 	}
@@ -45,7 +55,7 @@ public class ForexRestController {
 			return new ResponseEntity<Account>(HttpStatus.PRECONDITION_FAILED);
 		}
 
-		if (account.getStatus().equalsIgnoreCase("OPEN") && account.getCurrency().equals(amount.getCurrency())
+		if (account != null && account.getStatus().equalsIgnoreCase("OPEN") && account.getCurrency().equals(amount.getCurrency())
 				&& amount.getAmount().compareTo(new BigDecimal(0)) == 1) {
 
 			Account result = null;
