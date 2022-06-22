@@ -1,0 +1,1 @@
+Projektas sukurtas naudojant Gradle 7.4 versiją ir Java 1.8
